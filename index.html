@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="ro-RO">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width">
+      <title>Technical report</title>
+      <link rel="stylesheet" href="scholarly.css">
+      <link rel="stylesheet" href="node_modules/prismjs/themes/prism-coy.css">
+   </head>
+   <body prefix="schema: http://schema.org/ xsd: http://www.w3.org/2001/XMLSchema# sa: https://ns.science.ai/">
+      <header>
+         <p class="title">Bill Manager Application </p>
+         <p class="subtitle">Technical report</p>
+      </header>
+      <article id="what" typeof="schema:ScholarlyArticle" resource="#">
+         <h1>Bill Manager Application</h1>
+         <h2>Technical Report</h2>
+         <section>
+            <ol>
+               <li property="schema:author" typeof="sa:ContributorRole">
+                  <a property="schema:author" typeof="schema:Person">
+                  <span property="schema:givenName">Anca Mihaela</span>
+                  <span property="schema:familyName">Gheorghitanu</span>
+                  </a>
+               </li>
+               <li property="schema:author" typeof="sa:ContributorRole">
+                  <a property="schema:author" typeof="schema:Person">
+                  <span property="schema:givenName">Livia Elena</span>
+                  <span property="schema:familyName">Martiniuc</span>
+                  </a>
+               </li>
+            </ol>
+         </section>
+         <section typeof="sa:Abstract" id="abstract">
+            <h2>Abstract</h2>
+            <p>
+               The bill manager application will be targeting IT professionals that work as free-lancers. 
+               Some key features are considered, the principal use-cases will be the following: sign-in,
+               sign-up, recover password, edit profile, add a new task, track tasks and work done, add a new category of activity,
+               edit categories, add a new project, edit existing projects, view reports or generate an invoice.
+            </p>
+         </section>
+         <section typeof="sa:Objectives" id="Objectives">
+            <h2>Objectives</h2>
+            <p>
+            <ol>
+               <li>To design a web-based application the specifically targets the it professionals needs;</li>
+               <li>To have an efficient way to track their work split into task, based on specific projects, described by a status and an amount of time;</li>
+               <li>To have an overview of the work done and the amount of income generated depending on different criteria such as time, client or project;</li>
+               <li>To set the pricing depending on the activity;</li>
+               <li>To generate invoices for customers with the possibility to edit the billed tasks included;</li>
+               <li>Generated invoices will be exported in specific formats CSV, JSON or XML;</li>
+            </ol>
+            </p>
+            <p>
+         </section>
+         <section typeof="sa:General metrics" id="General metrics">
+            <h2>General metrics</h2>
+            <ul>
+               <li>
+                  The user interface has to be intuitive, user-friendly and pleasing to the eye;
+               </li>
+               <li>
+                  The application has to be cross-browser compatible;
+               </li>
+               <li>
+                  The maximum amount of uses for the starters is 1000, and concurrent users 200;
+               </li>
+               <li>
+                  The application must be scalable.
+               </li>
+            </ul>
+         </section>
+         <section typeof="sa:Branding" id="Branding">
+         <h2>Branding</h2>
+         <p>
+            <dfn id="branding">Statement: "The simple way to be paid!"</dfn> 
+         </p>
+         <p>
+            Whether you’re a contractor or freelancer, one of the most important aspects of running a successful business is invoicing clients on time. Unfortunately, it’s something that sometimes is easier said than done. Our web application, Bill Manager, can offer you a helping hand.
+         </p>
+         <section typeof="sa:Assumptions" id="Assumptions">
+            <h2>Assumptions</h2>
+            <p>      
+            <ul>
+               <li>The application will be web-based;</li>
+               <li>The application is free of use;</li>
+               <li>Any user will access the application through a web-browser, any web-browser;</li>
+               <li>The user will be able to use the application only if he/she is authetificated;</li>
+               <li>The design of the application will be intuitive </li>
+            </ul>
+         </section>
+         <section typeof="sa:General arhitecture of the application" id="generic-arhitecture">
+         <h2>Arhitecture of the application</h2>
+         <p style="text-align: justify;"> The Bill Manager application wants to provide its users(IT freelancers) a way to keep track of their work and also keep track of the income generated. For designing the application we need to start from some basic questions:</p>
+	  <li style="text-align: left;">The application must support a variety of different clients including desktop browsers, mobile browsers;</li>	 
+	  <li style="text-align: left;">There is a team of developers (different locations)working on the application;</li>
+	  <li style="text-align: left;">New team members must quickly become productive so the applications needs to be easy to understand and modify;</li>
+	  <li style="text-align: left;">New technologies must be taken into consideration, because of later changes and compatibility issues;</li>
+	  <li style="text-align: left;">High scalability and availability is required; </li>
+	  <p style="text-align: justify;">
+	 For our needs, the concept of microservices seems to fit because:<br>
+	 <li style="text-align: left;">Each microservice is relatively small (which means more speed);</li>
+	 <li style="text-align: left;">Each service can be deployed independently of other services - easier to deploy new versions of services frequently</li>
+        <li style="text-align: left;">Each service can be developed and deployed independently.</li>
+	 <li style="text-align: left;">Improved fault isolation.</li>
+	 <li style="text-align: left;">Eliminates any long-term commitment to a technology stack. </li>         
+	 <br>
+	 <p>The biggest challenge with using this approach is deciding when it makes sense to use it. When developing the first version of an application, you often do not have the problems that this approach solves. Moreover, using an elaborate, distributed architecture will slow down development. This can be a major problem for startups whose biggest challenge is often how to rapidly evolve the business model and accompanying application. Using Y-axis splits might make it much more difficult to iterate rapidly. Later on, however, when the challenge is how to scale and you need to use functional decomposition, the tangled dependencies might make it difficult to decompose the application into a set of services.</p>
+	 <p>How to maintain data consistency?</p>
+	 <p>How to implement queries?</p>
+	 <p>use Command Query Responsibility Segregation and maintain denormalized views that do the join.</p>
+	  <figure typeof="sa:Image">
+         <img src="logicgeneral.png" width="100%" height="100%">
+         <figcaption>
+            Figure 1. General schema of the application arhitecture
+         </figcaption>
+	 </section>
+        </p>
+		 <section typeof="sa:Logic requirements" id="Logic-requirementsts">
+            <h2>Logic requirements</h2>
+            <h3>1. Login module</h3>
+            <figure typeof="sa:Image">
+               <img src="loginandregistration.png" width="880" height="655">
+               <figcaption>
+                  Figure 1. Use case of the login module
+               </figcaption>
+            </figure>
+            <p style="text-align:left"><b>a. Sign-in</b></p>
+            <p>  
+            <ul>
+               <li style="text-align:left">The application will allow the existent users to access their account thru log in with the valid provided credentials.</li>
+               <li style="text-align:left">
+                  The application will allow users that do not have an account within the application to log in via a third party using google auhentification, facebook or even twitter.<br>
+                  <p><b>Pre-conditions:</b> the non-registered user asked the application to register to it;<br>
+                     <b>Post-conditions:</b> the user successfully registered to the application and can access its functionality.<br>
+                  </p>
+            </ul>
+            </p>    
+            <p>
+            <p style="text-align:left">The following information is required:</p>
+            </p>
+            <table style="width:100%;background:#f5f5f5;" border="1" cellspacing="0" cellpadding="0">
+               <caption>Table 1. Sign-up elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Username</strong></td>
+                     <td>The username of the user</td>
+                     <td>Text input, 25 characters long</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Password</strong></td>
+                     <td>The password for the account</td>
+                     <td>Text input, encoded, 15 characters long</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Login button</strong></td>
+                     <td>Submits the request for login</td>
+                     <td>Button, enabled when both username and pass are filled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Login with Facebook</strong></td>
+                     <td>Submits the request for login (using external module)</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Login with twitter</strong></td>
+                     <td>Submits the request for login (using external module)</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Remember me </strong></td>
+                     <td>Caches login data</td>
+                     <td>Checkbox, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Forgot password?</strong></td>
+                     <td></td>
+                     <td>Hyperlink</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Sign-up</strong></td>
+                     <td></td>
+                     <td>Button</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <ul>
+               <li style="text-align:left">The application will process and validate the login request;</li>
+               <li style="text-align:left">The user is blocked if more than 3 attempts are done on login;</li>
+               <li style="text-align:left">There will be red-marks marking the required fields;</li>
+               <li style="text-align:left">Red warning messages will appear if there is a filed left empty;</li>
+               <li style="text-align:left">Red warning messages will appear if there is a mismatch in the credentials;</li>
+               <li style="text-align:left">Entering more than the limit of characters will not be possible;</li>
+            </ul>
+            <br>
+            <p style="text-align:left"><b>b. Register</b></p>
+            </br>
+            <ul>
+               <li style="text-align:left">The application will allow to create a new account.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the non-registered user asked the application to register to it;<br>
+               <b>Post-conditions:</b>the user successfully registered to the application and can access its functionality;
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table 2. Register elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Firstname</strong></td>
+                     <td>User firstname</td>
+                     <td>Text input, 25 characters long</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Lastname</strong></td>
+                     <td>The password for the account</td>
+                     <td>Text input, 25 characters long</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Email</strong></td>
+                     <td>Users email</td>
+                     <td>Text input, 50 characters long, specific format</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Phone</strong></td>
+                     <td>Users phone</td>
+                     <td>
+                        Text input, 25 characters long,</p>
+                        <p>Specific format
+                     </td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Password</strong></td>
+                     <td>Password of the account</td>
+                     <td>Text input, encoded, 15 characters long</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Confirm password </strong></td>
+                     <td>Same password for confirmation</td>
+                     <td>Text input, encoded, 15 characters long</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save</strong></td>
+                     <td>Saves data, submits request for sign-up</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Cancel</strong></td>
+                     <td>Leaves page</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <ul>
+               <li style="text-align:left">The application will process and validate the registration request;</li>
+               <li style="text-align:left">There will be red-marks marking the required fields;</li>
+               <li style="text-align:left">Red warning messages will appear if there is a filed left empty;</li>
+               <li style="text-align:left">Red warning messages will appear if there is a mismatch in the password/confirm password fields;</li>
+               <li style="text-align:left">Red warning messages will appear if the email and phone fields do not have a specific format.</li>
+               <li style="text-align:left">Entering more than the limit of characters will not be possible;</li>
+            </ul>
+            <br>
+            <p style="text-align:left"><b>c. Recover password</b></p>
+            </br>
+            <ul>
+               <li style="text-align:left">A user can enter their email and have password sent by e-mail.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the user pressed “Forgot password?” hyperlink on the login page.<br>
+               <b>Post-conditions:</b> the user receives an email with a hyperlink to reset its password.
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table 2.  Recover password elemets</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Password</strong></td>
+                     <td>New password of the account</td>
+                     <td>Text input, encoded, 15 characters long</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Confirm password </strong></td>
+                     <td>Same password for confirmation</td>
+                     <td>Text input, encoded, 15 characters long</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save</strong></td>
+                     <td>Saves data, submits request for password change</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <ul>
+               <li style="text-align:left">The user can ask the application to recover his password by pressing “Forgot password?” button on the login page. The application will display a message that an email was sent with the password.</li>
+               <li style="text-align:left">Entering more than the limit of characters will not be possible;</li>
+            </ul>
+            <br>
+            <p style="text-align:left"><b>d. Edit profile</b></p>
+            </br>
+            <figure typeof="sa:Image">
+               <img src="myprofileusecase.png" width="880" height="655">
+               <figcaption> Figure 2. Edit profile use case diagram
+               </figcaption>
+            </figure>
+            <ul>
+               <li style="text-align:left">The application will allow a user to edit its personal information.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the logged in user click on the ‘account’ tab in the application and has the initiative to change personal information.<br>
+               <b>Post-conditions:</b> the user successfully edited personal data and now it is in use;
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table 3. Edit profile elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>First name</strong></td>
+                     <td>User first name</td>
+                     <td>Text input, 25 characters long</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Last name</strong></td>
+                     <td>The password for the account</td>
+                     <td>Text input, 25 characters long</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Email</strong></td>
+                     <td>Users email</td>
+                     <td>Text input, 50 characters long, specific format</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Phone</strong></td>
+                     <td>Users phone</td>
+                     <td>
+                        Text input, 25 characters long,</p>
+                        <p>Specific format
+                     </td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Address</strong></td>
+                     <td>The user address</td>
+                     <td>Text input, 150 characters long</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>City</strong></td>
+                     <td>The user city</td>
+                     <td>
+                        Text input, 50</p>
+                        <p>characters long
+                     </td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Postcode </strong></td>
+                     <td>The user postcode</td>
+                     <td>
+                        Text input, 10 characters long,</p>
+                        <p>Specific format
+                     </td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Country</strong></td>
+                     <td>The country of the user</td>
+                     <td>Combo box, prefilled with default values</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Old Password</strong></td>
+                     <td>Password of the account</td>
+                     <td>Text input, encoded, 15 characters long</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>New Password</strong></td>
+                     <td>New password</td>
+                     <td>Text input, encoded, 15 characters long</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Confirm password </strong></td>
+                     <td>New password for confirmation</td>
+                     <td>Text input, encoded, 15 characters long</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save</strong></td>
+                     <td>Saves data, submits request for sign-up</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Cancel</strong></td>
+                     <td>Leaves page</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p>After log in, the user has the possibility to visualize and edit his personal information on his profile tab.	</p>
+         </section>
+         <section typeof="sa:Dashboard module" id="dashboard-module">
+            <h3>2. Dashboards module</h3>
+            <figure typeof="sa:Image">
+               <img src="dashboardusecase.png" width="880" height="655">
+               <figcaption>
+                  Figure 3. Use case of the dashboards module
+               </figcaption>
+            </figure>
+            <p>The application will allow to have a persistent list with dashboards, consisting in clients and task categories that can be edited/deleted/created/read at any time.
+               The dashboards module will manage the activities or task categories as they are named. This ones will be, amongside 
+               the projects, the base for any invoice. For managing the categories we can create a narrowly focused and independent service(microservice)
+               . Same for clients. This microservices will have a separated database, which will be stored on a central database server. 
+            </p>
+            <figure typeof="sa:Image">
+               <img src="logicdashboards.png" width="880" height="655">
+               <figcaption>
+                  Figure 4. Dashboards module
+               </figcaption>
+            </figure>
+            <p style="text-align:left"><b>a. Activities/task categories</b></p>
+            <ul>
+               <li style="text-align:left">A list of activities can be added or edited at any time.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the logged in user clicks on the ‘Dashboards’ tab in the application and has the initiative to change or add new categories<br>
+               <b>Post-conditions:</b> the user successfully edited activities data and now it is in use;
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table 4. Activities/tasks categories elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Activities table</strong></td>
+                     <td>Table with the activities/pricing</td>
+                     <td>Html table</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Add new category</strong></td>
+                     <td>Adds a new row editable in the table</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Edit category</strong></td>
+                     <td>Enables editing on the selected row</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save category</strong></td>
+                     <td>Saves everything</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Delete category</strong></td>
+                     <td>Deletes the current select row/category</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Navigation</strong></td>
+                     <td>Navigates thru categories because only a specific number of records is showed</td>
+                     <td>Buttons, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <ul>
+               <li style="text-align:left">The user can maintain a record with all the activities and prices that he practices. Any activity has a description and a price per hour. The categories can be edited, deleted and the user can navigate thru. New categories can be also added.</li>
+               <li style="text-align:left">To edit a category the user has to click on a row;</li>
+               <li style="text-align:left">To delete a category the user has to click on a row;</li>
+               <li style="text-align:left">At creating a new category all the fields are required.</li>
+               <li style="text-align:left">At editing a category all the fields are required;</li>
+               <li style="text-align:left">A category cannot be deleted if it is related with a task (any status). A read warning appears if the category cannot be deleted.</li>
+               <li style="text-align:left">A category cannot be edited if it is related with a task (any status). A read warning appears if the category cannot be edited.</li>
+            </ul>
+            <p style="text-align:left"><b>b. Clients</b></p>
+            </br>
+            <ul>
+               <li style="text-align:left">A list of clients can be added or edited at any time.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the logged in user clicks on the ‘Dashboards’ tab in the application and has the initiative to change or add new clients.<br>
+               <b>Post-conditions:</b>  the user successfully edited client data and now it is in use;
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Clients elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Clients table</strong></td>
+                     <td>Table with the clients</td>
+                     <td>Html table</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Add new client</strong></td>
+                     <td>Adds a new row editable in the table</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Edit client</strong></td>
+                     <td>Enables editing on the selected row</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save client</strong></td>
+                     <td>Saves everything</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Delete client</strong></td>
+                     <td>Deletes the current select row/category</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Navigation</strong></td>
+                     <td>Navigates thru clients because only a specific number of records is showed</td>
+                     <td>Buttons, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">The user can maintain a record with all the clients and that he has. Any client has certain details: name, address, phone, email, additional information. The clients can be edited, deleted and the user can navigate thru. New clients can be also added.</li>
+            <li style="text-align:left">To edit a client, the user has to click on a row;</li>
+            <li style="text-align:left">To delete a client the user has to click on a row;</li>
+            <li style="text-align:left">At creating a client all the fields are required except additional information;</li>
+            <li style="text-align:left">At editing a client all the fields are required; except additional information;</li>
+            <li style="text-align:left">A client cannot be deleted if it is related with a project. A read warning appears if the client cannot be deleted.</li>
+            <li style="text-align:left">A client cannot be edited if it is related with a project that has a task (any status). A read warning appears if the client cannot be edited.</li>
+         </section>
+         <section typeof="sa:Tasks module" id="tasks-module">
+            <h3>3. Tasks module</h3>
+            <figure typeof="sa:Image">
+               <img src="taskusecase.png" width="880" height="655">
+               <figcaption>
+                  Figure . Use case of the task module
+               </figcaption>
+            </figure>
+            <p>The application will allow to have a persistent list with tasks that can be edited/deleted/created/read at any time. Each task is created based on a related project and also a task can be related to a client alone because
+               maybe a minor change was done to an existing functionality that was not developed by the freelancer that is using the application in the first place, so the project is not needed.
+               For managing the tasks we can create a narrowly focused and independent service (microservice). We will need data from other microservices
+               which are clients, activity categories and projects. For actually creating a task and because of the loose coupling between the microservices 
+               we will use a cqrs schema, as presented earlier in this raport, making  use of the query side of the client, project and activities microservice.
+            </p>
+            <figure typeof="sa:Image">
+               <img src="logictask.png" width="880" height="655">
+               <figcaption>
+                  Figure . Arhitecture for tasks module
+               </figcaption>
+            </figure>
+            <p style="text-align:left"><b>a Tasks overview</b></p>
+            </br>
+            <ul>
+               <li style="text-align:left">A list of tasks can be visualized at any time including filtering.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the logged in user clicks on the ‘Tasks’ tab in the application and has the initiative visualize or edit tasks.<br>
+               <b>Post-conditions:</b> the user successfully viewed tasks and now they can be used as a base for the generation of the invoices.
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Tasks overview elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Tasks table</strong></td>
+                     <td>Table with the added tasks</td>
+                     <td>Html table</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Edit task</strong></td>
+                     <td>Enables editing on the selected row</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save task</strong></td>
+                     <td>Saves everything</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Navigation</strong></td>
+                     <td>Navigates thru tasks because only a specific number of records is showed</td>
+                     <td>Buttons, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Start date field</strong></td>
+                     <td>Selects a start date for filtering the tasks</td>
+                     <td>Date picker, the text cannot be edited from the keyboard</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>End date field</strong></td>
+                     <td>Selects an end date for filtering the tasks</td>
+                     <td>Date picker, the text cannot be edited from the keyboard</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Search text box</strong></td>
+                     <td>Allows keywords and search at pressing enter</td>
+                     <td>Text input, 50 characters long</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">The user can maintain a record with all the tasks entered. Any task has certain details: name, project or client name, status, number of hours (duration), category activity. The tasks can be edited and the user can navigate thru.</li>
+            <li style="text-align:left">Filtering tasks can be done thru using start date – end date interval or keywords by entering them into the search field and pressing enter;</li>
+            <li style="text-align:left">To edit a task, the user has to click on a row (of the specific task he wants to edit), and after he is done has to press save to commit changes;</li>
+            <li style="text-align:left">At editing a task all the fields are required;</li>
+            <li style="text-align:left">Navigation thru records can be done using buttons, only 10 records are shown at a time;</li>
+            <li style="text-align:left">A task cannot be edited if it is already billed (included in an invoice);</li>
+            <li style="text-align:left">A read warning appears if the task cannot be edited.</li>
+            <p style="text-align:left"><b>b. Add new tasks</b></p>
+            </br>
+            <li style="text-align:left">A task can be created at any time. After adding a task it can be edited.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the logged in user clicks on the ‘Tasks’ tab in the application and has the initiative to add a task.<br>
+               <b>Post-conditions:</b> the user successfully added tasks data and now they can be used as a base for the generation of the invoices.
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Adding a tasks elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Task name</strong></td>
+                     <td>A description of the task</td>
+                     <td>Text input, 250 characters long, no special characters</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select project/client</strong></td>
+                     <td>The client for whom the task is created or the project</td>
+                     <td>Combo box, prefilled with values from the dashboard</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select category activity</strong></td>
+                     <td>The type of task done</td>
+                     <td>Combo box, prefilled with values from the dashboard</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Status of the task</strong></td>
+                     <td>Represents the status of the task</td>
+                     <td>Combo box, prefilled with default values</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Duration</strong></td>
+                     <td>The total duration of the task, in hours</td>
+                     <td>Counter</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save</strong></td>
+                     <td>Commits the changes</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Cancel</strong></td>
+                     <td>Resets all the data entered</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">The user can add a task that has certain details: name (small description), project or client name, status, number of hours (duration), category activity.</li>
+            <li style="text-align:left">The project cannot be selected if the deadline has passed;</li>
+            <li style="text-align:left">All the fields are required;</li>
+            <li style="text-align:left">A red warning appears if the user tries to save without filled mandatory data;</li>
+         </section>
+         <section typeof="sa:Projects module" id="projects-module">
+            <h3>4. Projects module</h3>
+            <figure typeof="sa:Image">
+               <img src="projectusecase.png" width="880" height="655">
+               <figcaption>
+                  Figure . Use case of the projects module
+               </figcaption>
+            </figure>
+            <p style="text-align: justify;">The application will allow to have a persistent list with projects that can be edited/deleted/created/read at any time.
+               For managing the projects we can create a narrowly focused and independent service (microservice. We will need data from another microservice
+               which is clients for actually creating a project and because of the loose coupling between the two microservices 
+               we will use a cqrs schema, as presented earlier in this raport, making  use of the query side of the client microservice.
+            </p>
+            <figure typeof="sa:Image">
+               <img src="logicproject.png" width="880" height="655">
+               <figcaption>
+                  Figure . Arhitecture for tasks module
+               </figcaption>
+            </figure>
+            <p style="text-align:left"><b>a. Projects overview</b></p>
+            </br>
+            <li style="text-align:left">A list of project that the professional has or had been working on can be visualized at any time including filtering.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the logged in user clicks on the ‘Projects’ tab in the application and has the initiative visualize the projects.<br>
+               <b>Post-conditions:</b> the user successfully viewed projects.
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Elements of the task overview</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Projects table</strong></td>
+                     <td>Table with the added project</td>
+                     <td>Html table</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Edit project</strong></td>
+                     <td>Enables editing on the selected row</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save project</strong></td>
+                     <td>Saves everything</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Navigation</strong></td>
+                     <td>Navigates thru projects because only a specific number of records is showed</td>
+                     <td>Buttons, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Start date field</strong></td>
+                     <td>Selects a start date for filtering the projects (by deadline)</td>
+                     <td>Date picker, the text cannot be edited from the keyboard</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>End date field</strong></td>
+                     <td>Selects an end date for filtering the tasks(by deadline)</td>
+                     <td>Date picker, the text cannot be edited from the keyboard</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Search text box</strong></td>
+                     <td>Allows keywords and searches at enter</td>
+                     <td>Text input, 50 characters long</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">The user can maintain a record with all the projects entered. Any project has certain details: project name,  client name, status, and a deadline. The project can be edited and the user can navigate thru.</li>
+            <li style="text-align:left">Filtering projects can be done thru using start date – end date interval or keywords by entering them into the search field and pressing enter; The result will be a project that has the deadline between the two dates entered;</li>
+            <li style="text-align:left">To edit a project, the user has to click on a row (of the specific project he wants to edit), and after he is done has to press save to commit changes;</li>
+            <li style="text-align:left">When editing the deadline, the status is taken into account the status. If the status is paid the project cannot be edited; A red warning appears if the user tries to do this type of changes; Also the deadline cannot be in the past;</li>
+            <li style="text-align:left">At editing a project all the fields are required;</li>
+            <li style="text-align:left">Navigation thru records can be done using buttons, only 10 records are shown at a time;</li>
+            <p style="text-align:left"><b>b. Add new projects</b></p>
+            </br>
+            <li style="text-align:left">A project can be created at any time. After adding a project it can be edited.</li>
+            </ul>
+            <p style="text-align:left"><b>Pre-conditions:</b> the logged in user clicks on the ‘Projects‘ tab in the application and has the initiative to add a project.<br>
+               <b>Post-conditions:</b> the user successfully added projects data and now they can be used as a base for the generation of the invoices.
+            </p>
+            <br>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Add a new project elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Project name</strong></td>
+                     <td>A description of the project</td>
+                     <td>Text input, 250 characters long, no special characters</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select client</strong></td>
+                     <td>The client for whom the task is created or the project</td>
+                     <td>Combo box, prefilled with values from the dashboard</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Deadline</strong></td>
+                     <td>The deadline of the project</td>
+                     <td>Date picker</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save</strong></td>
+                     <td>Commits the changes</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Cancel</strong></td>
+                     <td>Resets all the data entered</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">The user can add a projects that have certain details: name (small description), project name, client name and deadline;</li>
+            <li style="text-align:left">All the fields are required;</li>
+            <li style="text-align:left">A red warning appears if the user tries to save without filled mandatory data;</li>
+            <li style="text-align:left">The project name must be unique; a red warning appears if the name is not unique;</li>
+            <li style="text-align:left">The deadline cannot be in the past or today; A red warning appears if the user tries to enter this data;</li>
+         </section>
+         <section typeof="sa:Invoices module" id="invoices-module">
+            <h3>5. Invoices module</h3>
+            <figure typeof="sa:Image">
+               <img src="invoiceusecase.png" width="880" height="655">
+               <figcaption>
+                  Figure . Use case of the invoice module
+               </figcaption>
+            </figure>
+            <p style="text-align: justify;">The application will allow to have a persistent list with invoices. An invoice is made of tasks. If the client does not have
+               a project for which is billed  
+               For managing the projects we can create a narrowly focused and independent service (microservice. We will need data from another microservice
+               which is clients for actually creating a project and because of the loose coupling between the two microservices 
+               we will use a cqrs schema, as presented earlier in this raport, making  use of the query side of the client microservice.
+            </p>
+            <figure typeof="sa:Image">
+               <img src="logicinvoice.png" width="880" height="655">
+               <figcaption>
+                  Figure . Arhitecture for invoice module
+               </figcaption>
+            </figure>
+            <p style="text-align:left"><b>a. Selecting a base for invoice</b></p>
+            </br>
+            <p style="text-align: justify;">The application allows professionals to do a selection of the tasks that can be included in an invoice. The selection will be done based on client name, project name and a set of tasks between an interval.</p>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Selecting a base for invoice elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select client name</strong></td>
+                     <td>The client for whom the work has been done;</td>
+                     <td>Combo box, prefilled with values from the dashboard</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select project name</strong></td>
+                     <td>The project that is related with the tasks desired to be included in the invoice</td>
+                     <td>Combo box, prefilled with values from the dashboard</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select start date</strong></td>
+                     <td>Start date of filtering</td>
+                     <td>Date picker</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select end date</strong></td>
+                     <td>End date of filtering</td>
+                     <td>Date picker</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Load</strong></td>
+                     <td>Load the tasks according to the criteria entered</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Reset all fields</strong></td>
+                     <td>Resets all the fields (select client, project and that dates)</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">The date fields don’t accept user input, the dates can be selected only by selecting from the calendar;</li>
+            <li style="text-align:left">The start date cannot be bigger than the end date, if a user tries to do so a red warning appears notifying the user;</li>
+            <li style="text-align:left">If  the user presses the ‘load task’ button without any data selected (client name, project name, dates) red warning appears saying that fields are empty;</li>
+            <p style="text-align:left"><b>b. Selecting tasks that will be the base for invoice</b></p>
+            </br>
+            <p style="text-align: justify;">The application allows professionals to do a editing of the tasks that can be included in an invoice. The tasks can only be removed if desired, and after that the invoice can be generated.</p>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Elements in selecting the task for invoice</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Task table</strong></td>
+                     <td>Table with the tasks that will be included in invoice</td>
+                     <td>Html table</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Delete category</strong></td>
+                     <td>Deletes the current select row/task</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Generate invoice</strong></td>
+                     <td>Generates invoices, that include the tasks selected</td>
+                     <td>Buttons, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">The task can be removed from the invoice only by selecting a the row where its located;</li>
+            <p style="text-align:left"><b>c. Edit invoice</b></p>
+            </br>
+            <p style="text-align: justify;>The application allows professionals to edit the generated invoice.</p>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Edit invoice elements</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Invoice number</strong></td>
+                     <td>The generated number of the invoice</td>
+                     <td>Text input, 250 characters long, no special characters</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>To</strong></td>
+                     <td>The name of the client that the user is billing</td>
+                     <td>Text input, 250 characters long, no special characters</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>From</strong></td>
+                     <td>The name of the user that bills</td>
+                     <td>Text input, 250 characters long, no special characters</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Invoice date</strong></td>
+                     <td>The date when the invoice is generate</td>
+                     <td>Date picker</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Save</strong></td>
+                     <td>Commits the changes</td>
+                     <td>Button, enabled</td>
+                     <td>Yes</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Tasks table</strong></td>
+                     <td>The table that contains the details of the tasks billed and the total amount of money for them</td>
+                     <td>Html table</td>
+                     <td>Yes</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">The invoice number can be edited and is mandatory;</li>
+            <li style="text-align:left">The invoice number has to be unique, a red warning will appear if the user tries to enter such a value;</li>
+            <li style="text-align:left">The to and from fields cannot be edited and are mandatory; The fields are prefilled with the values from the first part with the filtering (client name) and from the account info of the user;</li>
+            <li style="text-align:left">The invoice date cannot be in the future; The text input format is not editable and the date can only be filled by selecting a date from the date picker;</li>
+         </section>
+         <section typeof="sa:Report module" id="reports-module">
+            <h3>6. Reports module</h3>
+            <figure typeof="sa:Image">
+               <img src="reportusecase.png" width="880" height="655">
+               <figcaption>
+                  Figure . Use case of the reports module
+               </figcaption>
+            </figure>
+            <p style="text-align: justify;">The application will allow to view reports about the income of the user from different aspects (temporal, by client, by project etc..
+               For generating the projects we can create a narrowly focused and independent service - microservice. We will need data from other microservices
+               which are tasks and invoices, for actually creating a report and because of the loose coupling between the microservices 
+               we will use a cqrs schema, as presented earlier in this raport, making use of the query side of the client microservice. We will have a command side also for writing the reports in the database, so we can see them later, if needed, 
+               avoiding the situation when a report with a large load of data behind takes too much load.
+            </p>
+            <figure typeof="sa:Image">
+               <img src="logicreport.png" width="880" height="655">
+               <figcaption>
+                  Figure . Arhitecture for reports module
+               </figcaption>
+            </figure>
+            <p style="text-align: justify;">  The application will allow the current user to see some reports. The reports are targeting the amount of income generated (by month, by year) and also number of hours and amount of income per project and client.</p>
+            <table style="width:100%;background:#f5f5f5;" border="1" width="100%" cellspacing="0" cellpadding="0">
+               <caption>Table. Elements in reports</caption>
+               <tbody>
+                  <tr>
+                     <td>
+                        <p align="center"><strong>Elements in page</strong></p>
+                     </td>
+                     <td><strong>Description</strong></td>
+                     <td><strong>Format</strong></td>
+                     <td><strong>Required</strong></td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select year</strong></td>
+                     <td>Selecting the year for the pie chart</td>
+                     <td>Combo box, prefilled with values &#8211; years</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Select month</strong></td>
+                     <td>Selecting the month for the bar chart</td>
+                     <td>Combo box, prefilled with values &#8211; months</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Project tab</strong></td>
+                     <td>Loads the table with the values by project</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Client tab</strong></td>
+                     <td>Loads the table with the values by client</td>
+                     <td>Button, enabled</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Start date</strong></td>
+                     <td>Start date of filtering</td>
+                     <td>Date picker</td>
+                     <td>&#8211;</td>
+                  </tr>
+                  <tr>
+                     <td><strong>End date</strong></td>
+                     <td>End date of filtering</td>
+                     <td>Date picket</td>
+                     <td>&#8211;</td>
+                  </tr>
+               </tbody>
+            </table>
+            <li style="text-align:left">By default the year for the pie chart with the amount of income per months is the current year;</li>
+            <li style="text-align:left">By default the month for the pie chart with the amount of income per weeks is the current year;</li>
+            <li style="text-align:left">If the project tab is selected the entire history of statistics is showed then the dates can be filled and a second filtering is done;</li>
+            <li style="text-align:left">If the client tab is selected the entire history of statistics is showed then the dates can be filled and a second filtering is done;</li>
+         </section>
+         <section typeof="sa:ReferenceList" id="references">
+            <h2>References</h2>
+            <dl>
+               <dt>NYT, 2014</dt>
+               <dd id="ref-nyt" typeof="schema:ScholarlyArticle"
+                  resource="http://www.scribd.com/doc/224608514/The-Full-New-York-Times-Innovation-Report">
+                  <cite property="schema:name"><a
+                     href="http://www.scribd.com/doc/224608514/The-Full-New-York-Times-Innovation-Report">The
+                  Full New York Times Innovation Report</a></cite>,
+                  by
+                  <span property="schema:author" typeof="schema:Person">
+                  <span property="schema:name">New York Times</span>
+                  </span>;
+                  <time property="schema:datePublished" datetime="2014-03" datatype="xsd:gYearMonth">2014 Mar</time>.
+               </dd>
+               <dt>Science.AI, 2015a</dt>
+               <dd id="ref-sa-ontology" typeof="schema:ScholarlyArticle"
+                  resource="https://github.com/scienceai/scholarly-article/blob/master/scholarly-article.json">
+                  <cite property="schema:name"><a
+                     href="https://github.com/scienceai/scholarly-article/blob/master/scholarly-article.json">The
+                  Scholarly Article ontology</a></cite>,
+                  by
+                  <span property="schema:author" typeof="schema:Person">
+                  <span property="schema:name">Science.AI</span>
+                  </span>;
+                  <time property="schema:datePublished" datetime="2015-09" datatype="xsd:gYearMonth">2015 Sep</time>.
+               </dd>
+               <dt>Science.AI, 2015b</dt>
+               <dd id="ref-vernacular" typeof="schema:ScholarlyArticle" resource="http://vernacular.io/">
+                  <cite property="schema:name"><a href="http://vernacular.io/">Vernacular — HTML Made Special</a></cite>,
+                  by
+                  <span property="schema:author" typeof="schema:Person">
+                  <span property="schema:name">Science.AI</span>
+                  </span>;
+                  <time property="schema:datePublished" datetime="2015-10" datatype="xsd:gYearMonth">2015 Oct</time>.
+               </dd>
+            </dl>
+         </section>
+      </article>
+      <footer>
+      </footer>
+   </body>
+</html>
